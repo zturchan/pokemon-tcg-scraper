@@ -111,10 +111,11 @@ def parse_attacks(row, card):
 
 def parse_attack(row, attack):
     if attack != None:
+        damage = attack["damage"] if "damage" in attack else ""
         row.extend([''.join(attack["cost"]),
                     attack["name"],
                     attack["text"],
-                    attack["damage"],
+                    damage,
                     attack["convertedEnergyCost"]])
     else:
         row.extend(["","","","",""])
