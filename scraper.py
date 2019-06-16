@@ -27,7 +27,6 @@ def main():
                           'image_url_hi_res',
                           'subtype',
                           'supertype',
-                          'ancient_trait',
                           'hp',
                           'number',
                           'artist',
@@ -60,6 +59,7 @@ def create_workbook(cards, default_fields):
             else:
                 raise Exception("Unexpected data type found: " + field +
                                 ". Value is " + str(value))
+        parse_ancient_trait(row, card)
         parse_types(row, card)
         parse_ability(row, card)
         parse_text(row, card)
@@ -69,6 +69,12 @@ def create_workbook(cards, default_fields):
         ws.append(row)
 
     wb.save("pkmn_output.xlsx")
+
+def parse_ancient_trait(row, card):
+    if card.ancient_trait != None:
+        row.extend([card.ancient_trait["name"],card.ancient_trait["text"]])
+    else:
+        row.extend(["",""])
 
 def parse_types(row, card):
     for i in range(2):
@@ -122,7 +128,9 @@ def parse_attack(row, attack):
 
 def create_header_row(default_fields):
     row = default_fields.copy()
-    row.extend(["type1",
+    row.extend(["ancient_trait_name",
+                "ancient_trait_text",
+                "type1",
                 "type2",
                 "ability_name",
                 "ability_text",
