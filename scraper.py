@@ -36,7 +36,6 @@ def main():
                           'set',
                           'set_code',
                           'converted_retreat_cost',
-                          'types',
                           'evolves_from']
     #cards = Card.all()
     cards = Card.where(set='generations')
@@ -61,6 +60,7 @@ def create_workbook(cards, default_fields):
             else:
                 raise Exception("Unexpected data type found: " + field +
                                 ". Value is " + str(value))
+        parse_types(row, card)
         parse_ability(row, card)
         parse_text(row, card)
         parse_attacks(row, card)
@@ -68,8 +68,14 @@ def create_workbook(cards, default_fields):
         parse_resistance(row, card)
         ws.append(row)
 
-
     wb.save("pkmn_output.xlsx")
+
+def parse_types(row, card):
+    for i in range(2):
+        if(card.types == None or len(card.types) <= i):
+            row.append("")
+        else:
+            row.append(card.types[i])
 
 def parse_ability(row, card):
     if card.ability != None:
@@ -113,10 +119,11 @@ def parse_attack(row, attack):
     else:
         row.extend(["","","","",""])
 
-
 def create_header_row(default_fields):
     row = default_fields.copy()
-    row.extend(["ability_name",
+    row.extend(["type1",
+                "type2",
+                "ability_name",
                 "ability_text",
                 "text",
                 "attack1_cost",
