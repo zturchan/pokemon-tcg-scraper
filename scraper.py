@@ -36,8 +36,7 @@ def main():
                           'set_code',
                           'converted_retreat_cost',
                           'evolves_from']
-    #cards = Card.all()
-    cards = Card.where(set='generations')
+    cards = Card.all()
     create_workbook(cards, fields_remain_same)
 
 def create_workbook(cards, default_fields):
