@@ -68,6 +68,28 @@ def create_workbook(cards, default_fields):
 
 def create_header_row(default_fields):
     row = default_fields.copy()
+    row.extend(["ability_name",
+                "ability_text",
+                "text",
+                "attack1_cost",
+                "attack1_name",
+                "attack1_text",
+                "attack1_damage",
+                "attack1_converted_energy_cost",
+                "attack2_cost",
+                "attack2_name",
+                "attack2_text",
+                "attack2_damage",
+                "attack2_converted_energy_cost",
+                "attack3_cost",
+                "attack3_name",
+                "attack3_text",
+                "attack3_damage",
+                "attack3_converted_energy_cost",
+                "weakness_type",
+                "weakness_value",
+                "resistance_type",
+                "resistance_value"])
     return row
 
 if __name__ == '__main__':
