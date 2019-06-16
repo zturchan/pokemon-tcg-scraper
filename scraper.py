@@ -13,7 +13,24 @@
 from pokemontcgsdk import Card
 
 def main():
- pass
+    fields_remain_same = ['id',
+                          'name',
+                          'national_pokedex_number',
+                          'image_url',
+                          'image_url_hi_res',
+                          'subtype',
+                          'supertype',
+                          'ancient_trait',
+                          'hp',
+                          'number',
+                          'artist',
+                          'rarity',
+                          'series',
+                          'set',
+                          'set_code',
+                          'converted_retreat_cost',
+                          'types',
+                          'evolves_from']
 
 if __name__ == '__main__':
     main()
