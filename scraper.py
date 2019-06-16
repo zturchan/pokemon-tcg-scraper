@@ -61,10 +61,58 @@ def create_workbook(cards, default_fields):
             else:
                 raise Exception("Unexpected data type found: " + field +
                                 ". Value is " + str(value))
+        parse_ability(row, card)
+        parse_text(row, card)
+        parse_attacks(row, card)
+        parse_weakness(row, card)
+        parse_resistance(row, card)
         ws.append(row)
 
 
     wb.save("pkmn_output.xlsx")
+
+def parse_ability(row, card):
+    if card.ability != None:
+        row.extend([card.ability["name"],card.ability["text"]])
+    else:
+        row.extend(["",""])
+
+def parse_text(row, card):
+    # Get Rules text (e.g. Mega Evolution text) if applicable
+    if card.text != None:
+        row.append(" ".join(card.text))
+    else:
+        row.append("")
+
+def parse_weakness(row, card):
+    if card.weaknesses != None:
+        row.extend([card.weaknesses[0]["type"], card.weaknesses[0]["value"]])
+    else:
+        row.extend(["",""])
+
+def parse_resistance(row, card):
+    if card.resistances != None:
+        row.extend([card.resistances[0]["type"], card.resistances[0]["value"]])
+    else:
+        row.extend(["",""])
+
+def parse_attacks(row, card):
+    for i in range(3):
+        if(card.attacks == None or len(card.attacks) <= i):
+            row.extend(["","","","",""])
+        else:
+            parse_attack(row, card.attacks[i])
+
+def parse_attack(row, attack):
+    if attack != None:
+        row.extend([''.join(attack["cost"]),
+                    attack["name"],
+                    attack["text"],
+                    attack["damage"],
+                    attack["convertedEnergyCost"]])
+    else:
+        row.extend(["","","","",""])
+
 
 def create_header_row(default_fields):
     row = default_fields.copy()
