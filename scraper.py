@@ -10,7 +10,7 @@
 # Licence:     LICENSE.txt
 #-------------------------------------------------------------------------------
 
-from pokemontcgsdk import Card
+from pokemontcgsdk import Card, Set
 from openpyxl import Workbook
 from openpyxl.styles import Font
 from os import remove
@@ -125,6 +125,9 @@ def parse_attack(row, attack):
                     attack["convertedEnergyCost"]])
     else:
         row.extend(["","","","",""])
+
+def get_set(card, sets):
+    return next(set for set in sets if set.code == card.set_code)
 
 def create_header_row(default_fields):
     row = default_fields.copy()
