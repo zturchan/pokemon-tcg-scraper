@@ -153,7 +153,11 @@ def create_header_row(default_fields):
                 "weakness_type",
                 "weakness_value",
                 "resistance_type",
-                "resistance_value"])
+                "resistance_value",
+                "set:total_cards",
+                "set:standard_legal",
+                "set:expanded_legal",
+                "set:release_date"])
     return row
 
 if __name__ == '__main__':
