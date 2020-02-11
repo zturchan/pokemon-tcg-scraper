@@ -36,10 +36,18 @@ def main():
                           'set_code',
                           'converted_retreat_cost',
                           'evolves_from']
-    cards = Card.all()
-    create_workbook(cards, fields_remain_same)
 
-def create_workbook(cards, default_fields):
+    set_fields = ['total_cards',
+                  'standard_legal',
+                  'expanded_legal',
+                  'release_date']
+
+    cards = Card.all()
+    sets = Set.all()
+
+    create_workbook(cards, fields_remain_same, sets, set_fields)
+
+def create_workbook(cards, default_fields, sets, set_fields):
     if Path("pkmn_output.xlsx").is_file():
         remove("pkmn_output.xlsx")
     wb = Workbook()
@@ -65,6 +73,10 @@ def create_workbook(cards, default_fields):
         parse_attacks(row, card)
         parse_weakness(row, card)
         parse_resistance(row, card)
+        set = get_set(card, sets)
+        for field in set_fields:
+            value = getattr(set, field)
+            row.append(value)
         ws.append(row)
 
     wb.save("pkmn_output.xlsx")
