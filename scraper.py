@@ -10,7 +10,7 @@
 # Licence:     LICENSE.txt
 #-------------------------------------------------------------------------------
 
-from pokemontcgsdk import Card
+from pokemontcgsdk import Card, Set
 from openpyxl import Workbook
 from openpyxl.styles import Font
 from os import remove
@@ -36,10 +36,18 @@ def main():
                           'set_code',
                           'converted_retreat_cost',
                           'evolves_from']
-    cards = Card.all()
-    create_workbook(cards, fields_remain_same)
 
-def create_workbook(cards, default_fields):
+    set_fields = ['total_cards',
+                  'standard_legal',
+                  'expanded_legal',
+                  'release_date']
+
+    cards = Card.all()
+    sets = Set.all()
+
+    create_workbook(cards, fields_remain_same, sets, set_fields)
+
+def create_workbook(cards, default_fields, sets, set_fields):
     if Path("pkmn_output.xlsx").is_file():
         remove("pkmn_output.xlsx")
     wb = Workbook()
@@ -65,6 +73,10 @@ def create_workbook(cards, default_fields):
         parse_attacks(row, card)
         parse_weakness(row, card)
         parse_resistance(row, card)
+        set = get_set(card, sets)
+        for field in set_fields:
+            value = getattr(set, field)
+            row.append(value)
         ws.append(row)
 
     wb.save("pkmn_output.xlsx")
@@ -126,6 +138,9 @@ def parse_attack(row, attack):
     else:
         row.extend(["","","","",""])
 
+def get_set(card, sets):
+    return next(set for set in sets if set.code == card.set_code)
+
 def create_header_row(default_fields):
     row = default_fields.copy()
     row.extend(["ancient_trait_name",
@@ -153,7 +168,11 @@ def create_header_row(default_fields):
                 "weakness_type",
                 "weakness_value",
                 "resistance_type",
-                "resistance_value"])
+                "resistance_value",
+                "set:total_cards",
+                "set:standard_legal",
+                "set:expanded_legal",
+                "set:release_date"])
     return row
 
 if __name__ == '__main__':
